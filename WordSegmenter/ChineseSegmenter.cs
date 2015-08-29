@@ -176,13 +176,17 @@ namespace WordSegmenter
                 }
                 else
                 {
-                    finalResult.AddRange(regex2.Split(block).Where(split => !string.IsNullOrEmpty(split)));
+                    finalResult.AddRange((from p in regex2.Split(block)
+                                          where !string.IsNullOrEmpty(p)
+                                          let charArray = p.ToCharArray()
+                                          from c in charArray
+                                          select "" +c).ToList());
                 }
             }
             return string.Join("/", finalResult);
-          
 
-           
+
+
         }
     }
 }
