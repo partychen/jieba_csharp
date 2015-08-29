@@ -1,0 +1,5 @@
+/Users/chen/Projects/jieba_csharp/WordSegmenter/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/chen/Projects/jieba_csharp/WordSegmenter/bin/Debug/WordSegmenter.dll.mdb
+/Users/chen/Projects/jieba_csharp/WordSegmenter/bin/Debug/WordSegmenter.dll
+/Users/chen/Projects/jieba_csharp/WordSegmenter/obj/Debug/WordSegmenter.dll
+/Users/chen/Projects/jieba_csharp/WordSegmenter/obj/Debug/WordSegmenter.dll.mdb

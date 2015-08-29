@@ -12,7 +12,11 @@ namespace WordSegmenter
 
         public static int DictionaryValueGet(this IDictionary<string, int> dict, string key)
         {
-            if (dict.ContainsKey(key)) return dict[key];
+			if (dict.ContainsKey (key)) {
+				if (dict [key] == 0)
+					return 1;
+				return dict [key];
+			}
             return 1;
         }
 
@@ -21,5 +25,12 @@ namespace WordSegmenter
             if (dict.ContainsKey(key)) return dict[key];
             return -3.14e+100;
         }
+
+		public static bool DictionaryHasValue(this IDictionary<string, int> dict, string key)
+		{
+			if (dict.ContainsKey (key) && dict [key] > 0)
+				return true;
+			return false;
+		}
     }
 }

@@ -104,7 +104,7 @@ namespace WordSegmenter
         {
             if (word.Length > 1)
             {
-                if (!_wordFrequency.WordsFrequencies.ContainsKey(word))
+				if (!_wordFrequency.WordsFrequencies.DictionaryHasValue(word))
                 {
                     var result = new List<string>();
                     result.AddRange(withHmm ? ViterbiAlogorithm.Instance.Viterbi(word) : word.Select(w => "" + w));
@@ -184,9 +184,6 @@ namespace WordSegmenter
                 }
             }
             return string.Join("/", finalResult);
-
-
-
         }
     }
 }
