@@ -90,7 +90,7 @@ namespace WordSegmenter
             {
                 foreach (var to in dags[i])
                 {
-                    double wordLog = Math.Log(_wordFrequency.WordsFrequencies.DictionaryValueGet(sentence.Sub(i, to)));
+                    double wordLog = Math.Log(_wordFrequency.WordsFrequencies.GetEffectiveFrequency(sentence.Sub(i, to)));
                     if (routes[i] == null || wordLog - logTotal + routes[to + 1].Weight > routes[i].Weight)
                     {
                         routes[i] = new Route(to, wordLog - logTotal + routes[to + 1].Weight);
@@ -104,7 +104,7 @@ namespace WordSegmenter
         {
             if (word.Length > 1)
             {
-                if (!_wordFrequency.WordsFrequencies.ContainsKey(word))
+                if (!_wordFrequency.WordsFrequencies.HasEffectiveValue(word))
                 {
                     var result = new List<string>();
                     result.AddRange(withHmm ? ViterbiAlogorithm.Instance.Viterbi(word) : word.Select(w => "" + w));
@@ -180,13 +180,10 @@ namespace WordSegmenter
                                           where !string.IsNullOrEmpty(p)
                                           let charArray = p.ToCharArray()
                                           from c in charArray
-                                          select "" +c).ToList());
+                                          select "" + c).ToList());
                 }
             }
             return string.Join("/", finalResult);
-
-
-
         }
     }
 }

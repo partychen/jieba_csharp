@@ -9,8 +9,8 @@ namespace WordSegmenter.viterbi
 {
     public class ViterbiAlogorithm
     {
-        private readonly char[] _state = new[] { 'B', 'E', 'M', 'S' };
-        private readonly double[] _initProb = new[] { -0.26268660809250016, -3.14e+100, -3.14e+100, -1.4652633398537678 };
+        private readonly char[] _state = { 'B', 'E', 'M', 'S' };
+        private readonly double[] _initProb = { -0.26268660809250016, -3.14e+100, -3.14e+100, -1.4652633398537678 };
         private readonly double[,] _transProb =
         {
             {-3.14e+100, -0.510825623765990, -0.916290731874155, -3.14e+100},
@@ -20,7 +20,7 @@ namespace WordSegmenter.viterbi
         };
 
         private readonly string _file = ConfigurationManager.AppSettings["prob_emit_file_path"];
-        private Dictionary<char, Dictionary<char, double>> _emitProb = new Dictionary<char, Dictionary<char, double>>();
+        private Dictionary<char, Dictionary<char, double>> _emitProb;
 
         private static ViterbiAlogorithm _instance;
         private ViterbiAlogorithm()
@@ -52,17 +52,17 @@ namespace WordSegmenter.viterbi
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        weight[i, j] = _initProb[j] + _emitProb[_state[j]].DictionaryValueGet(sentence[i]);
+                        weight[i, j] = _initProb[j] + _emitProb[_state[j]].GetProb(sentence[i]);
                     }
                     continue;
                 }
                 for (int j = 0; j < 4; j++)
                 {
-                    weight[i, j] = -3.14e+100;
+                    weight[i, j] = Helper.MinValue;
                     path[i, j] = -1;
                     for (int k = 0; k < 4; k++)
                     {
-                        double tmp = weight[i - 1, k] + _transProb[k, j] + _emitProb[_state[j]].DictionaryValueGet(sentence[i]);
+                        double tmp = weight[i - 1, k] + _transProb[k, j] + _emitProb[_state[j]].GetProb(sentence[i]);
                         if (tmp > weight[i, j])
                         {
                             weight[i, j] = tmp;
@@ -102,7 +102,7 @@ namespace WordSegmenter.viterbi
 
             var blocks = regex1.Split(sentence);
             var finalResult = new List<string>();
-            
+
             foreach (var block in blocks)
             {
                 if (string.IsNullOrEmpty(block)) continue;

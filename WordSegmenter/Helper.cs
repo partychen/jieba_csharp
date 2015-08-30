@@ -5,21 +5,25 @@ namespace WordSegmenter
 {
     public static class Helper
     {
+        public static double MinValue = -3.14e+100;
         public static string Sub(this string sentence, int start, int end)
         {
             return sentence.Substring(start, end - start + 1);
         }
 
-        public static int DictionaryValueGet(this IDictionary<string, int> dict, string key)
+        public static int GetEffectiveFrequency(this IDictionary<string, int> dict, string key)
         {
-            if (dict.ContainsKey(key)) return dict[key];
-            return 1;
+            return dict.ContainsKey(key) && dict[key] > 0 ? dict[key] : 1;
         }
 
-        public static double DictionaryValueGet(this IDictionary<char, double> dict, char key)
+        public static bool HasEffectiveValue(this IDictionary<string, int> dict, string key)
         {
-            if (dict.ContainsKey(key)) return dict[key];
-            return -3.14e+100;
+            return dict.ContainsKey (key) && dict [key] > 0;
+        }
+
+        public static double GetProb(this IDictionary<char, double> dict, char key)
+        {
+            return dict.ContainsKey(key) ? dict[key] : MinValue;
         }
     }
 }
