@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
@@ -32,3 +33,39 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
+=======
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordSegmenter", "WordSegmenter\WordSegmenter.csproj", "{7493DB4F-53B7-45DB-B8B6-2C336D4D8793}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordSegmenter.Test", "WordSegmenter.Test\WordSegmenter.Test.csproj", "{E910E2AB-39EF-454F-9E79-6FDFDADBEE25}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WordSegmenter.Run", "WordSegmenter.Run\WordSegmenter.Run.csproj", "{700B6D15-7512-44C2-A19F-0E70B6ABAAD5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{700B6D15-7512-44C2-A19F-0E70B6ABAAD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{700B6D15-7512-44C2-A19F-0E70B6ABAAD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{700B6D15-7512-44C2-A19F-0E70B6ABAAD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{700B6D15-7512-44C2-A19F-0E70B6ABAAD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7493DB4F-53B7-45DB-B8B6-2C336D4D8793}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7493DB4F-53B7-45DB-B8B6-2C336D4D8793}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7493DB4F-53B7-45DB-B8B6-2C336D4D8793}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7493DB4F-53B7-45DB-B8B6-2C336D4D8793}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E910E2AB-39EF-454F-9E79-6FDFDADBEE25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E910E2AB-39EF-454F-9E79-6FDFDADBEE25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E910E2AB-39EF-454F-9E79-6FDFDADBEE25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E910E2AB-39EF-454F-9E79-6FDFDADBEE25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+>>>>>>> 072098838ffae14bbb18c7632044d67bbc548e89
