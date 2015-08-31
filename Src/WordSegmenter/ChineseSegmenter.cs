@@ -19,12 +19,6 @@ namespace WordSegmenter
             _routeGenerator = new BestRouteGenerator(_dagGenerator);
         }
 
-        public enum CutCommandType
-        {
-            All,
-            Search,
-            Index
-        }
         public ICutDagCommand GetCutDagCommand(CutCommandType cutCommandType)
         {
             if (cutCommandType == CutCommandType.All)

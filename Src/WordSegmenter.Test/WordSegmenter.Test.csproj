@@ -58,6 +58,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="test_files\dict.txt" />
+    <Content Include="test_files\user_dict2.txt" />
+    <Content Include="test_files\user_dict.txt" />
     <Content Include="test_files\prob_emit.txt" />
     <None Include="App.config" />
     <None Include="test_files\prob_emit.json" />

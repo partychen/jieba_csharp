@@ -104,7 +104,7 @@ namespace WordSegmenter.Test
             WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
             const string sentence = @"他来到了浙江省网易杭研大厦";
 
-            var result = _segmenter.Run(sentence, ChineseSegmenter.CutCommandType.Search);
+            var result = _segmenter.Run(sentence, CutCommandType.Search);
             var segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江省/网易/杭/研/大厦", segment);
         }
@@ -114,7 +114,7 @@ namespace WordSegmenter.Test
         {
             WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
             const string sentence = @"他来到了浙江省网易杭研大厦";
-            var result = _segmenter.Run(sentence, ChineseSegmenter.CutCommandType.Index);
+            var result = _segmenter.Run(sentence, CutCommandType.Index);
             var segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江省/网易/杭研/大厦", segment);
         }
@@ -124,9 +124,41 @@ namespace WordSegmenter.Test
         {
             WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
             const string sentence = @"他来到了浙江省网易杭研大厦";
-            var result = _segmenter.Run(sentence, ChineseSegmenter.CutCommandType.All);
+            var result = _segmenter.Run(sentence, CutCommandType.All);
             var segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江/浙江省/网易/杭/研/大厦", segment);
+        }
+
+        [TestMethod]
+        public void TestAddWord()
+        {
+            WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
+            WordDictionary.Instance.Command = _segmenter.GetCutDagCommand(CutCommandType.Search);
+            const string sentence = @"他来到了浙江省网易大厦";
+            var result = _segmenter.Run(sentence);
+            var segment = string.Join("/", result);
+            Assert.AreEqual("他/来到/了/浙江省/网易/大厦", segment);
+
+            WordDictionary.Instance.LoadUserDictWord(@"..\..\test_files\user_dict.txt");
+            result = _segmenter.Run(sentence);
+            segment = string.Join("/", result);
+            Assert.AreEqual("他/来到/了/浙江省/网易大厦", segment);
+        }
+
+        [TestMethod]
+        public void TestAddWord2()
+        {
+            WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
+            WordDictionary.Instance.Command = _segmenter.GetCutDagCommand(CutCommandType.Search);
+            const string sentence = @"他来到了浙江省网易大厦";
+            var result = _segmenter.Run(sentence);
+            var segment = string.Join("/", result);
+            Assert.AreEqual("他/来到/了/浙江省/网易/大厦", segment);
+
+            WordDictionary.Instance.LoadUserDictWord(@"..\..\test_files\user_dict2.txt");
+            result = _segmenter.Run(sentence);
+            segment = string.Join("/", result);
+            Assert.AreEqual("他/来到/了/浙江省/网易大厦", segment);
         }
     }
 }

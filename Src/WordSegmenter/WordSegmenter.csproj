@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CutCommandType.cs" />
     <Compile Include="CutCommand\BaseCutDagCommand.cs" />
     <Compile Include="ISegmenter.cs" />
     <Compile Include="RouteGenerator\BestRouteGenerator.cs" />

@@ -21,17 +21,17 @@ namespace WordSegmenter.RouteGenerator
             segments[len] = new Segment(0, 0);
             for (int i = len - 1; i >= 0; i--)
             {
-                var route = new Segment(i, Helper.MinValue);
+                var segment = new Segment(i, Helper.MinValue);
                 foreach (var to in dags[i])
                 {
                     double wordLog = Math.Log(_wordDictionary.GetEffectiveFrequency(sentence.Sub(i, to)));
-                    if (wordLog - logTotal + segments[to + 1].Weight > route.Weight)
+                    if (wordLog - logTotal + segments[to + 1].Weight > segment.Weight)
                     {
-                        route.To = to;
-                        route.Weight = wordLog - logTotal + segments[to + 1].Weight;
+                        segment.To = to;
+                        segment.Weight = wordLog - logTotal + segments[to + 1].Weight;
                     }
                 }
-                segments[i] = route;
+                segments[i] = segment;
             }
             return new Route(segments);
         }
