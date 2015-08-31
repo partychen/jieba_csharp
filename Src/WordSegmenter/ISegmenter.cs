@@ -4,7 +4,6 @@ namespace WordSegmenter
 {
     public interface ISegmenter
     {
-        string Run(string sentence, CutCommandType cutCommandType = CutCommandType.Index);
-        ICutDagCommand GetCutDagCommand(CutCommandType cutCommandType);
+        string Cut(string sentence);
     }
 }

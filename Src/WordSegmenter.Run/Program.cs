@@ -1,4 +1,10 @@
 ﻿using System;
+using Microsoft.Practices.Unity;
+using WordSegmenter.CutCommand;
+using WordSegmenter.DagGenerator;
+using WordSegmenter.RouteGenerator;
+using WordSegmenter.viterbi;
+
 namespace WordSegmenter.Run
 {
     class Program
@@ -93,10 +99,11 @@ namespace WordSegmenter.Run
                 "AT&T/是/一件/不错/的/公司/，/给/你/发/offer/了/吗/？",
                 "C++/和/c#/是/什么/关系/？/11/+/122/=/133/，/是/吗/？",
             };
-            var segmenter = new ChineseSegmenter();
+
+            var segmenter = new SegmenterFactory();
             for (var i = 0; i < input.Length; i ++)
             {
-                string result = segmenter.Run(input[i]);
+                string result = segmenter.Cut(input[i],CutCommandType.Index);
                 if (result != expected[i])
                 {
                     Console.WriteLine(expected[i]);
