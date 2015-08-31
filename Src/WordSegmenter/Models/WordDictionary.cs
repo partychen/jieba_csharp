@@ -11,12 +11,17 @@ namespace WordSegmenter.Models
     public class WordDictionary
     {
         private readonly string _file = ConfigurationManager.AppSettings["dict_file_path"];
+        private readonly string _userFile = ConfigurationManager.AppSettings["user_dict_file_path"];
         public IDictionary<string, int> WordsFrequencies { get; private set; }
         public ICutDagCommand Command { get; set; }
         public int TotalFrequency { get; private set; }
         private WordDictionary()
         {
             LoadDictWords(_file);
+            if (!string.IsNullOrEmpty(_userFile))
+            {
+                LoadUserDictWord(_userFile);
+            }
         }
         private static WordDictionary _instance;
         public static WordDictionary Instance
@@ -132,10 +137,14 @@ namespace WordSegmenter.Models
             }
         }
 
-        public int SuggestFrequency(string word)
+        private int SuggestFrequency(string word)
         {
-            double freq = Command.Cut(word).Aggregate(1.0, (current, seg) => current * (GetEffectiveFrequency(seg) * 1.0 / TotalFrequency));
-            return Math.Max((int)freq * TotalFrequency + 1, GetEffectiveFrequency(word));
+            if (Command != null)
+            {
+                double freq = Command.Cut(word).Aggregate(1.0, (current, seg) => current * (GetEffectiveFrequency(seg) * 1.0 / TotalFrequency));
+                return Math.Max((int)freq * TotalFrequency + 1, GetEffectiveFrequency(word));
+            }
+            return GetEffectiveFrequency(word);
         }
     }
 }
