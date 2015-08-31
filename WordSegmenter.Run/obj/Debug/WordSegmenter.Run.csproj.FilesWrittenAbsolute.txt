@@ -1,8 +1,0 @@
-/Users/chen/Projects/jieba_csharp/WordSegmenter.Run/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
-/Users/chen/Projects/jieba_csharp/WordSegmenter.Run/bin/Debug/WordSegmenter.Run.exe.config
-/Users/chen/Projects/jieba_csharp/WordSegmenter.Run/bin/Debug/WordSegmenter.Run.exe.mdb
-/Users/chen/Projects/jieba_csharp/WordSegmenter.Run/bin/Debug/WordSegmenter.Run.exe
-/Users/chen/Projects/jieba_csharp/WordSegmenter.Run/obj/Debug/WordSegmenter.Run.exe
-/Users/chen/Projects/jieba_csharp/WordSegmenter.Run/obj/Debug/WordSegmenter.Run.exe.mdb
-/Users/chen/Projects/jieba_csharp/WordSegmenter.Run/bin/Debug/WordSegmenter.dll
-/Users/chen/Projects/jieba_csharp/WordSegmenter.Run/bin/Debug/WordSegmenter.dll.mdb

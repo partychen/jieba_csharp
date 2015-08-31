@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7493DB4F-53B7-45DB-B8B6-2C336D4D8793}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>WordSegmenter</RootNamespace>
+    <AssemblyName>WordSegmenter</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Libs\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CutCommand\BaseCutDagCommand.cs" />
+    <Compile Include="ISegmenter.cs" />
+    <Compile Include="RouteGenerator\BestRouteGenerator.cs" />
+    <Compile Include="ChineseSegmenter.cs" />
+    <Compile Include="CutCommand\CutAllCommand.cs" />
+    <Compile Include="CutCommand\CutWithHmmCommand.cs" />
+    <Compile Include="CutCommand\CutWithoutHmmCommand.cs" />
+    <Compile Include="DagGenerator\DagGenerator.cs" />
+    <Compile Include="Helper.cs" />
+    <Compile Include="CutCommand\ICutDagCommand.cs" />
+    <Compile Include="DagGenerator\IDagGenerator.cs" />
+    <Compile Include="RouteGenerator\IRouteGenerator.cs" />
+    <Compile Include="JSON.cs" />
+    <Compile Include="Models\HiddenMarkovModel.cs" />
+    <Compile Include="Models\Segment.cs" />
+    <Compile Include="Models\WordDictionary.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="files\dict.txt" />
+    <Compile Include="viterbi\IAlgorithm.cs" />
+    <Compile Include="viterbi\NoHmmAlgorithm.cs" />
+    <Compile Include="viterbi\ViterbiAlgorithm.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="files\prob_emit.json" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
