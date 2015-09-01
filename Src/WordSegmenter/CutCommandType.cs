@@ -6,4 +6,10 @@ namespace WordSegmenter
         Hmm,
         NoHmm
     }
+
+    public enum AddWordCommandType
+    {
+        Hmm,
+        NoHmm
+    }
 }

@@ -1,9 +1,4 @@
 ﻿using System;
-using Microsoft.Practices.Unity;
-using WordSegmenter.CutCommand;
-using WordSegmenter.DagGenerator;
-using WordSegmenter.RouteGenerator;
-using WordSegmenter.viterbi;
 
 namespace WordSegmenter.Run
 {
@@ -11,7 +6,7 @@ namespace WordSegmenter.Run
     {
         static void Main(string[] args)
         {
-            var input = new String[]
+            var input = new[]
             {
                 "我不喜欢日本和服。",
                 "雷猴回归人间。",
@@ -100,10 +95,10 @@ namespace WordSegmenter.Run
                 "C++/和/c#/是/什么/关系/？/11/+/122/=/133/，/是/吗/？",
             };
 
-            var segmenter = new SegmenterFactory();
+            var segmenter = new ChineseSegmenter();
             for (var i = 0; i < input.Length; i ++)
             {
-                string result = segmenter.Cut(input[i],CutCommandType.Index);
+                string result = segmenter.Cut(input[i]);
                 if (result != expected[i])
                 {
                     Console.WriteLine(expected[i]);

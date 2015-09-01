@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Practices.Unity;
 using WordSegmenter.CutCommand;
 using WordSegmenter.DagGenerator;
+using WordSegmenter.Models;
 using WordSegmenter.RouteGenerator;
 using WordSegmenter.viterbi;
 
@@ -11,10 +13,74 @@ namespace WordSegmenter
 {
     public class ChineseSegmenter : ISegmenter
     {
-        private readonly ICutDagCommand _cutDagCommand;
-        public ChineseSegmenter(ICutDagCommand cutDagCommand)
+        private readonly WordDictionary _wordDictionary = WordDictionary.Instance;
+        public IDagGenerator DagGenerator { get; set; }
+        public IRouteGenerator RouteGenerator { get; set; }
+        public IAlgorithm Algorithm { get; set; }
+
+        public ICutDagCommand CutDagCommand { get; set; }
+
+        public ICutDagCommand AddWordCutCommand { get; set; }
+
+        public ChineseSegmenter()
         {
-            _cutDagCommand = cutDagCommand;
+            DagGenerator = new DagGenerator.DagGenerator();
+            RouteGenerator = new BestRouteGenerator(DagGenerator);
+            Algorithm = new ViterbiAlgorithm();
+            CutDagCommand = new CutWithHmmCommand(DagGenerator,RouteGenerator,Algorithm);
+            AddWordCutCommand = new CutWithHmmCommand(DagGenerator, RouteGenerator, Algorithm);
+        }
+
+        public ChineseSegmenter(CutCommandType cutCommandType)
+        {
+            DagGenerator = new DagGenerator.DagGenerator();
+            RouteGenerator = new BestRouteGenerator(DagGenerator);
+            if (cutCommandType == CutCommandType.All)
+            {
+                CutDagCommand = new CutAllCommand(DagGenerator, RouteGenerator);
+            }
+            else if (cutCommandType == CutCommandType.Hmm)
+            {
+                Algorithm = new ViterbiAlgorithm();
+                CutDagCommand = new CutWithHmmCommand(DagGenerator, RouteGenerator, Algorithm);
+            }
+            else
+            {
+                Algorithm = new NoHmmAlgorithm();
+                CutDagCommand = new CutWithoutHmmCommand(DagGenerator, RouteGenerator, Algorithm);
+            }
+            AddWordCutCommand = new CutWithHmmCommand(DagGenerator, RouteGenerator, Algorithm);
+        }
+
+        public ChineseSegmenter(CutCommandType cutCommandType, AddWordCommandType addWordCommandType)
+        {
+            DagGenerator = new DagGenerator.DagGenerator();
+            RouteGenerator = new BestRouteGenerator(DagGenerator);
+            if (cutCommandType == CutCommandType.All)
+            {
+                CutDagCommand = new CutAllCommand(DagGenerator, RouteGenerator);
+            }
+            else if (cutCommandType == CutCommandType.Hmm)
+            {
+                Algorithm = new ViterbiAlgorithm();
+                CutDagCommand = new CutWithHmmCommand(DagGenerator, RouteGenerator, Algorithm);
+            }
+            else
+            {
+                Algorithm = new NoHmmAlgorithm();
+                CutDagCommand = new CutWithoutHmmCommand(DagGenerator, RouteGenerator, Algorithm);
+            }
+
+            if (addWordCommandType == AddWordCommandType.Hmm)
+            {
+                Algorithm = new ViterbiAlgorithm();
+                CutDagCommand = new CutWithHmmCommand(DagGenerator, RouteGenerator, Algorithm);
+            }
+            else
+            {
+                Algorithm = new NoHmmAlgorithm();
+                CutDagCommand = new CutWithoutHmmCommand(DagGenerator, RouteGenerator, Algorithm);
+            }
         }
 
         public string Cut(string sentence)
@@ -28,7 +94,7 @@ namespace WordSegmenter
                 if (string.IsNullOrEmpty(block)) continue;
                 if (regex1.IsMatch(block))
                 {
-                    finalResult.AddRange(_cutDagCommand.Cut(block));
+                    finalResult.AddRange(CutDagCommand.Cut(block));
                 }
                 else
                 {
@@ -41,42 +107,57 @@ namespace WordSegmenter
             }
             return string.Join("/", finalResult);
         }
-    }
 
-    public class SegmenterFactory
-    {
-        public IUnityContainer Container = new UnityContainer();
-
-        public SegmenterFactory()
+        public void LoadUserDictWord(string path)
         {
-            Container.RegisterType<IDagGenerator, DagGenerator.DagGenerator>()
-                .RegisterType<IRouteGenerator, BestRouteGenerator>();
+            using (var sr = new StreamReader(path))
+            {
+                while (!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    if (!string.IsNullOrEmpty(line))
+                    {
+                        var lineDatas = line.Trim().Split(' ');
+                        int? frequency = null;
+                        string tag = string.Empty;
+                        if (lineDatas.Length > 2)
+                        {
+                            frequency = int.Parse(lineDatas[1]);
+                            tag = lineDatas[2];
+                        }
+                        else if (lineDatas.Length == 2)
+                        {
+                            int f;
+                            if (int.TryParse(lineDatas[1], out f))
+                            {
+                                frequency = f;
+                            }
+                            else
+                            {
+                                tag = lineDatas[1];
+                            }
+                        }
+                        AddWord(lineDatas[0], frequency, tag);
+                    }
+                }
+            }
         }
 
-        public ICutDagCommand GetCutDagCommand(CutCommandType cutCommandType)
+        public void AddWord(string word, int? frequency, string tag)
         {
-            Container.RegisterType<IAlgorithm, ViterbiAlgorithm>()
-                .RegisterType<ICutDagCommand, CutWithHmmCommand>();
-            return Container.Resolve<ICutDagCommand>();
+            int f = frequency ?? SuggestFrequency(word);
+            _wordDictionary.AddWord(word,f,tag);
         }
-        public string Cut(string sentence, CutCommandType cutCommandType)
+
+        private int SuggestFrequency(string word)
         {
-            if (cutCommandType == CutCommandType.All)
+            if (AddWordCutCommand != null)
             {
-                Container.RegisterType<ICutDagCommand, CutAllCommand>();
+                double freq = AddWordCutCommand.Cut(word).Aggregate(1.0,
+                    (current, seg) => current * (_wordDictionary.GetEffectiveFrequency(seg) * 1.0 / _wordDictionary.TotalFrequency));
+                return Math.Max((int)freq * _wordDictionary.TotalFrequency + 1, _wordDictionary.GetEffectiveFrequency(word));
             }
-            else if (cutCommandType == CutCommandType.Hmm)
-            {
-                Container.RegisterType<IAlgorithm, ViterbiAlgorithm>()
-                    .RegisterType<ICutDagCommand, CutWithHmmCommand>();
-            }
-            else
-            {
-                Container.RegisterType<IAlgorithm, NoHmmAlgorithm>()
-                    .RegisterType<ICutDagCommand, CutWithoutHmmCommand>();
-            }
-            Container.RegisterType<ISegmenter, ChineseSegmenter>();
-            return Container.Resolve<ISegmenter>().Cut(sentence);
+            return _wordDictionary.GetEffectiveFrequency(word);
         }
     }
 }

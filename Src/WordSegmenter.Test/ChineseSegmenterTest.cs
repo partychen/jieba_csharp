@@ -10,7 +10,7 @@ namespace WordSegmenter.Test
     [TestClass]
     public class ChineseSegmenterTest
     {
-        private SegmenterFactory _segmenter;
+        private ChineseSegmenter _segmenter;
         private IDagGenerator _dagGenerator;
         private IRouteGenerator _routeGeneratorgenerator;
         private IAlgorithm _hhmAlgorithm;
@@ -20,7 +20,6 @@ namespace WordSegmenter.Test
             _dagGenerator = new DagGenerator.DagGenerator();
             _routeGeneratorgenerator = new BestRouteGenerator(_dagGenerator);
             _hhmAlgorithm = new ViterbiAlgorithm();
-            _segmenter = new SegmenterFactory();
         }
         [TestMethod]
         public void TestLoadDictWords()
@@ -103,8 +102,8 @@ namespace WordSegmenter.Test
         {
             WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
             const string sentence = @"他来到了浙江省网易杭研大厦";
-
-            var result = _segmenter.Cut(sentence, CutCommandType.NoHmm);
+            _segmenter = new ChineseSegmenter(CutCommandType.NoHmm);
+            var result = _segmenter.Cut(sentence);
             var segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江省/网易/杭/研/大厦", segment);
         }
@@ -114,7 +113,8 @@ namespace WordSegmenter.Test
         {
             WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
             const string sentence = @"他来到了浙江省网易杭研大厦";
-            var result = _segmenter.Cut(sentence, CutCommandType.Hmm);
+            _segmenter = new ChineseSegmenter(CutCommandType.Hmm);
+            var result = _segmenter.Cut(sentence);
             var segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江省/网易/杭研/大厦", segment);
         }
@@ -124,7 +124,8 @@ namespace WordSegmenter.Test
         {
             WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
             const string sentence = @"他来到了浙江省网易杭研大厦";
-            var result = _segmenter.Cut(sentence, CutCommandType.All);
+            _segmenter = new ChineseSegmenter(CutCommandType.All);
+            var result = _segmenter.Cut(sentence);
             var segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江/浙江省/网易/杭/研/大厦", segment);
         }
@@ -133,14 +134,14 @@ namespace WordSegmenter.Test
         public void TestAddWord()
         {
             WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
-            WordDictionary.Instance.Command = _segmenter.GetCutDagCommand(CutCommandType.Hmm);
+            _segmenter = new ChineseSegmenter(CutCommandType.Hmm, AddWordCommandType.Hmm);
             const string sentence = @"他来到了浙江省网易大厦";
-            var result = _segmenter.Cut(sentence, CutCommandType.Hmm);
+            var result = _segmenter.Cut(sentence);
             var segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江省/网易/大厦", segment);
 
-            WordDictionary.Instance.LoadUserDictWord(@"..\..\test_files\user_dict.txt");
-            result = _segmenter.Cut(sentence, CutCommandType.Hmm);
+            _segmenter.LoadUserDictWord(@"..\..\test_files\user_dict.txt");
+            result = _segmenter.Cut(sentence);
             segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江省/网易大厦", segment);
         }
@@ -149,14 +150,14 @@ namespace WordSegmenter.Test
         public void TestAddWord2()
         {
             WordDictionary.Instance.LoadDictWords(@"..\..\test_files\dict2.txt");
-            WordDictionary.Instance.Command = _segmenter.GetCutDagCommand(CutCommandType.Hmm);
+            _segmenter = new ChineseSegmenter(CutCommandType.Hmm, AddWordCommandType.Hmm);
             const string sentence = @"他来到了浙江省网易大厦";
-            var result = _segmenter.Cut(sentence, CutCommandType.Hmm);
+            var result = _segmenter.Cut(sentence);
             var segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江省/网易/大厦", segment);
 
-            WordDictionary.Instance.LoadUserDictWord(@"..\..\test_files\user_dict2.txt");
-            result = _segmenter.Cut(sentence, CutCommandType.Hmm);
+            _segmenter.LoadUserDictWord(@"..\..\test_files\user_dict2.txt");
+            result = _segmenter.Cut(sentence);
             segment = string.Join("/", result);
             Assert.AreEqual("他/来到/了/浙江省/网易大厦", segment);
         }
